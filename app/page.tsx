@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 
+type CounterAction = "increase" | "decrease" | "reset";
+
 export default function Home() {
-  const headerGradient = "from-indigo-600 to-purple-600"; 
+  const headerGradient = "from-indigo-600 to-purple-600";
   const cardBg = "bg-white";
   const buttonBg = "bg-indigo-100";
   const buttonText = "text-gray-700";
@@ -15,8 +17,19 @@ export default function Home() {
     { title: "raddish salad", time: "10 minutes to make", desc: "blah blah blah" },
   ];
 
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState<number>(0);
 
+  const generalButton = (action: CounterAction) => {
+    if (action === "decrease") {
+      setCount((prev) => prev - 1);
+    } else if (action === "increase") {
+      setCount((prev) => prev + 1);
+    } else if (action === "reset") {
+      setCount(0);
+    }
+  };
+
+  const countColorClass = count > 0 ? "text-green-600" : count < 0 ? "text-red-600" : "text-gray-800";
 
   return (
     <div className="min-h-screen bg-indigo-50">
@@ -27,9 +40,7 @@ export default function Home() {
           <h1 className="text-white text-2xl font-semibold">Cooking Ninja</h1>
           <div className="flex items-center space-x-6">
             <div className="hidden md:flex items-center space-x-2">
-              <span className="text-xl text-white font-thin cursor-pointer">
-                Search:
-              </span>
+              <span className="text-xl text-white font-thin cursor-pointer">Search:</span>
               <input
                 type="text"
                 placeholder="Search recipes..."
@@ -51,11 +62,9 @@ export default function Home() {
                 key={i}
                 className={`${cardBg} p-6 shadow-md rounded-md flex flex-col`}
               >
-                <h3 className="text-xl text-gray-800 font-semibold mb-3">
-                  {r.title}
-                </h3>
-                <p className="mb-2">{r.time}</p>
-                <p className="my-4 flex-grow">{r.desc}</p>
+                <h3 className="text-xl text-gray-800 font-semibold mb-3 text-black">{r.title}</h3>
+                <p className="mb-2 text-black">{r.time}</p>
+                <p className="my-4 flex-grow text-black">{r.desc}</p>
                 <button
                   className={`text-lg font-semibold ${buttonText} ${buttonBg} px-4 py-1 rounded-md block mx-auto`}
                 >
@@ -67,26 +76,26 @@ export default function Home() {
         </div>
       </main>
 
-       <main className="min-h-screen grid items-center">
+      <main className="min-h-screen grid items-center">
         <div className="container text-center">
-          <h1 className="text-7xl font-semibold">Counter</h1>
-          <span className="text-8xl font-bold">{count}</span>
+          <h1 className="text-7xl font-semibold text-black">Counter</h1>
+          <span className={`text-8xl font-bold ${countColorClass}`}>{count}</span>
           <div className="mt-6">
             <button
-              onClick={() => setCount(() => count - 1)}
-              className="uppercase bg-transparent py-2 px-4 tracking-widest text-sm border border-green-600 rounded-md m-2 hover:bg-green-100"
+              onClick={() => generalButton("decrease")}
+              className="uppercase bg-transparent py-2 px-4 tracking-widest text-black text-sm border border-green-600 rounded-md m-2 hover:bg-green-100"
             >
               decrease
             </button>
             <button
-              onClick={() => setCount(0)}
-              className="uppercase bg-transparent py-2 px-4 tracking-widest text-sm border border-green-600 rounded-md m-2 hover:bg-green-100"
+              onClick={() => generalButton("reset")}
+              className="uppercase bg-transparent py-2 px-4 tracking-widest text-black text-sm border border-green-600 rounded-md m-2 hover:bg-green-100"
             >
               reset
             </button>
             <button
-              onClick={() => setCount(() => count + 1)}
-              className="uppercase bg-transparent py-2 px-4 tracking-widest text-sm border border-green-600 rounded-md m-2 hover:bg-green-100"
+              onClick={() => generalButton("increase")}
+              className="uppercase bg-transparent py-2 px-4 tracking-widest text-black text-sm border border-green-600 rounded-md m-2 hover:bg-green-100"
             >
               increase
             </button>
@@ -96,4 +105,3 @@ export default function Home() {
     </div>
   );
 }
-
